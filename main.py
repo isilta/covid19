@@ -28,14 +28,15 @@ soup = BeautifulSoup(resp, 'lxml')
 
 #Get cited count
 found_cited = soup.select_one('#maincontent > div.hide-overflow.toc.page-box-wide > form > h2').get_text()
-found_cited = re.findall('\d+', found_cited)[0]
+found_cited = re.findall('\\d+', found_cited)[0]
 
 #Grab list
 cited_list = soup.find_all('div', class_='rprt')
 
 cited_ids = []
 for cited_item in cited_list:
-    cited = cited_item.find('dd').get_text().strip()
+    pmc_section = cited_item.find('dl', class_='rprtid')
+    cited = pmc_section.find('dd').get_text().strip()
     cited_ids.append(cited)
 
 print('Found', found_cited, 'articles')
